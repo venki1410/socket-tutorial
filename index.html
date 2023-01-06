@@ -1,0 +1,32 @@
+<html>
+	<head> </head>
+	<body>
+		<p>select your room!</p>
+		<a href="/executive">Executive</a><br />
+		<a href="/engineer">Engineering</a><br />
+		<p>Create room</p>
+		<input id="input-room-name" />
+		<button onclick="createRoom()">Create Room</button><br /><br />
+	</body>
+	<script>
+		const rooms = '<%= rooms %>'
+		const roomList = rooms.split(',')
+		function createRoom() {
+			var name = document.getElementById('input-room-name').value
+			document.body.innerHTML += `<a href="/room?name=${name}">${name}</a> <br /><br />`
+			httpGet(name)
+		}
+
+		function httpGet(name) {
+			var xmlHttp = new XMLHttpRequest()
+			xmlHttp.open('GET', `/addRoom?name=${name}`, false)
+			xmlHttp.send(null)
+			return xmlHttp.responseText
+		}
+		for (const name of roomList) {
+			if (name != '') {
+				document.body.innerHTML += `<a href="/room?name=${name}">${name}</a> <br /><br />`
+			}
+		}
+	</script>
+</html>
