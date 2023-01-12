@@ -25,14 +25,6 @@ app.get('/', (req, res) => {
 	res.render(path.join(__dirname, '/', 'index.html'), { rooms: roomList })
 })
 
-app.get('/executive', (req, res) => {
-	res.sendFile(__dirname + '/executive.html')
-})
-
-app.get('/engineer', (req, res) => {
-	res.sendFile(__dirname + '/engineer.html')
-})
-
 app.get('/room/', (req, res) => {
 	var name = req.query.name
 	res.render(path.join(__dirname, '/', 'rooms.html'), { rooms: name })
@@ -68,7 +60,7 @@ adminNameSpace.on('connect', (socket) => {
 
 	socket.on('send message to all', (data) => {
 		console.log('message: ' + data.msg)
-		adminNameSpace.in('executive').in('engineer').emit('chat message', data.msg)
+		adminNameSpace.emit('chat message', data.msg)
 	})
 })
 
