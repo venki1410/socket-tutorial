@@ -15,6 +15,7 @@ instrument(io, {
 })
 const path = require('path')
 const roomList = []
+const users = []
 
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
@@ -46,7 +47,8 @@ app.get('/addRoom/', (req, res) => {
 
 const adminNameSpace = io.of('/admin')
 adminNameSpace.on('connect', (socket) => {
-	//console.log('a user connected')
+	console.log('a user connected')
+	console.log(socket.id)
 
 	socket.on('join', (data) => {
 		socket.join(data.room)
