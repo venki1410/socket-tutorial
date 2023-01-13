@@ -15,10 +15,13 @@ instrument(io, {
 })
 const path = require('path')
 const roomList = []
+const roomList2 = []
 const users = []
 
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
+
+//nsp
 
 app.get('/', (req, res) => {
 	// res.sendFile(__dirname + '/index.html')
@@ -27,7 +30,8 @@ app.get('/', (req, res) => {
 
 app.get('/room/', (req, res) => {
 	var name = req.query.name
-	res.render(path.join(__dirname, '/', 'rooms.html'), { rooms: name })
+	var nsp = req.query.name
+	res.render(path.join(__dirname, '/', 'rooms.html'), { rooms: name, nsp: nsp })
 })
 
 app.get('/addRoom/', (req, res) => {
@@ -37,14 +41,14 @@ app.get('/addRoom/', (req, res) => {
 	res.send(200)
 })
 
-const adminNameSpace = io.of('/admin')
-adminNameSpace.on('connect', (socket) => {
+const nameSpace = io.of(/^\/organisation-\d+$/)
+nameSpace.on('connect', (socket) => {
 	console.log('a user connected')
 	console.log(socket.id)
 
 	socket.on('join', (data) => {
 		socket.join(data.room)
-		adminNameSpace
+		nameSpace
 			.in(data.room)
 			.emit('chat message', `New person joined the ${data.room} room`)
 	})
@@ -55,12 +59,12 @@ adminNameSpace.on('connect', (socket) => {
 
 	socket.on('chat message', (data) => {
 		console.log('message: ' + data.msg)
-		adminNameSpace.in(data.room).emit('chat message', data.msg)
+		nameSpace.in(data.room).emit('chat message', data.msg)
 	})
 
 	socket.on('send message to all', (data) => {
 		console.log('message: ' + data.msg)
-		adminNameSpace.emit('chat message', data.msg)
+		nameSpace.emit('chat message', data.msg)
 	})
 })
 
