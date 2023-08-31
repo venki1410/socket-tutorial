@@ -64,7 +64,8 @@
 		</form>
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
-			var socket = io('/organisation-101')
+			let organizationId = prompt('organization id')
+			var socket = io(`/organisation-${organizationId}`)
 			var form = document.getElementById('form')
 			var input = document.getElementById('input')
 

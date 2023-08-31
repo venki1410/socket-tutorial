@@ -45,6 +45,7 @@ const nameSpace = io.of(/^\/organisation-\d+$/)
 nameSpace.on('connect', (socket) => {
 	console.log('a user connected')
 	console.log(socket.id)
+	console.log(socket.nsp.name)
 
 	socket.on('join', (data) => {
 		socket.join(data.room)
